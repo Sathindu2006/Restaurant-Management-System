@@ -1,0 +1,99 @@
+package ui;
+
+import DBConnection.DBConnection;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
+
+public class DashboardFrame extends JFrame {
+
+    DefaultTableModel model;
+    private JPanel mainPanel;
+    private JTable employeeMenuTable;
+    private JButton btnAdd, btnUpdate, btnDelete, btnHome, btnCustomer, btnEmployee;
+
+    public DashboardFrame() {
+        initComponents();
+        setLocationRelativeTo(null);
+
+        // Table model
+        model = new DefaultTableModel();
+        model.addColumn("ID");
+        model.addColumn("Name");
+        model.addColumn("Price");
+        employeeMenuTable.setModel(model);
+
+        loadMenuFromDB();
+
+        // Employee buttons
+        btnAdd.addActionListener(e -> new AddMenuItemFrame(this).setVisible(true));
+        btnUpdate.addActionListener(e -> {
+            int row = employeeMenuTable.getSelectedRow();
+            if (row == -1) { JOptionPane.showMessageDialog(this,"Select row!"); return; }
+            int id = Integer.parseInt(employeeMenuTable.getValueAt(row,0).toString());
+            new UpdateFrame(this,id).setVisible(true);
+        });
+        btnDelete.addActionListener(e -> deleteMenu());
+    }
+
+    public void loadMenuFromDB(){
+        model.setRowCount(0);
+        try(Connection con = DBConnection.getConnection()){
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM menu");
+            while(rs.next()){
+                model.addRow(new Object[]{rs.getInt("menu_id"), rs.getString("item_name"), rs.getDouble("price")});
+            }
+        } catch(SQLException e){
+            JOptionPane.showMessageDialog(this,"DB Error: "+e.getMessage());
+        }
+    }
+
+    private void deleteMenu(){
+        int row = employeeMenuTable.getSelectedRow();
+        if(row==-1){ JOptionPane.showMessageDialog(this,"Select row!"); return; }
+        int id = Integer.parseInt(employeeMenuTable.getValueAt(row,0).toString());
+        int confirm = JOptionPane.showConfirmDialog(this,"Are you sure?","Delete",JOptionPane.YES_NO_OPTION);
+        if(confirm==JOptionPane.YES_OPTION){
+            try(Connection con = DBConnection.getConnection()){
+                PreparedStatement pst = con.prepareStatement("DELETE FROM menu WHERE menu_id=?");
+                pst.setInt(1,id);
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(this,"Deleted!");
+                loadMenuFromDB();
+            } catch(SQLException e){ JOptionPane.showMessageDialog(this,"DB Error: "+e.getMessage()); }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void initComponents() {
+        employeeMenuTable = new JTable();
+        mainPanel = new JPanel();
+        btnAdd = new JButton("Add");
+        btnUpdate = new JButton("Update");
+        btnDelete = new JButton("Delete");
+        btnHome = new JButton("Home");
+        btnCustomer = new JButton("Customer");
+        btnEmployee = new JButton("Employee");
+
+        JScrollPane scroll = new JScrollPane(employeeMenuTable);
+
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Dashboard");
+        setSize(600,400);
+        setLayout(null);
+
+        scroll.setBounds(20,50,400,200);
+        add(scroll);
+
+        btnAdd.setBounds(450,50,100,30);
+        btnUpdate.setBounds(450,100,100,30);
+        btnDelete.setBounds(450,150,100,30);
+        add(btnAdd); add(btnUpdate); add(btnDelete);
+
+        btnHome.setBounds(20,10,80,25);
+        btnCustomer.setBounds(110,10,100,25);
+        btnEmployee.setBounds(220,10,100,25);
+        add(btnHome); add(btnCustomer); add(btnEmployee);
+    }
+}
