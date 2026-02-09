@@ -3,7 +3,6 @@ package ui;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
-
 import DBConnection.DBConnection;
 
 public class EmployeeFrame extends JFrame {
@@ -15,24 +14,53 @@ public class EmployeeFrame extends JFrame {
 
     public EmployeeFrame(JFrame home) {
         this.home = home;
+
         setTitle("Employee Login");
-        setSize(400, 250);
+        setSize(500, 350); // frame size
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new GridLayout(3, 2, 10, 10));
 
-        add(new JLabel("Username:"));
+        // Background panel
+        JPanel backgroundPanel = new JPanel() {
+            private Image backgroundImage = new ImageIcon("resources/vitaly-gariev-9CR19q291ac-unsplash.jpg").getImage();
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+
+        backgroundPanel.setLayout(new GridLayout(3, 2, 10, 10));
+        setContentPane(backgroundPanel);
+
+        // --- Labels ---
+        JLabel lblUsername = new JLabel("Username:");
+        lblUsername.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        lblUsername.setForeground(Color.WHITE);
+        backgroundPanel.add(lblUsername);
+
         txtUsername = new JTextField();
-        add(txtUsername);
+        backgroundPanel.add(txtUsername);
 
-        add(new JLabel("Password:"));
+        JLabel lblPassword = new JLabel("Password:");
+        lblPassword.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        lblPassword.setForeground(Color.WHITE);
+        backgroundPanel.add(lblPassword);
+
         txtPassword = new JPasswordField();
-        add(txtPassword);
+        backgroundPanel.add(txtPassword);
 
-        add(new JLabel());
+        // Empty label and login button
+        backgroundPanel.add(new JLabel());
         btnLogin = new JButton("Login");
-        add(btnLogin);
+        btnLogin.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        btnLogin.setBackground(new Color(100, 149, 237));
+        btnLogin.setForeground(Color.WHITE);
+        btnLogin.setFocusPainted(false);
+        backgroundPanel.add(btnLogin);
 
+        // Button action
         btnLogin.addActionListener(e -> login());
     }
 
@@ -55,7 +83,4 @@ public class EmployeeFrame extends JFrame {
                 JOptionPane.showMessageDialog(this, "Invalid credentials!");
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "DB Error: " + ex.getMessage());
-        }
-    }
-}
+            JOptionPane.showMessageDialog(this, "DB
