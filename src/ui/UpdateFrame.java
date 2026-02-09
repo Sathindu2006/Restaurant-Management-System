@@ -1,7 +1,6 @@
 package ui;
 
 import DBConnection.DBConnection;
-
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
@@ -19,14 +18,24 @@ public class UpdateFrame extends JFrame {
         this.dashboard = dashboard;
         this.menuId = menuId;
         setTitle("Update Menu Item");
-        setSize(300, 200);
+        setSize(350, 220);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(3,2,10,10));
+        setLayout(new GridLayout(3,2,15,15));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        getContentPane().setBackground(new Color(245, 245, 245));
+        ((JPanel) getContentPane()).setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
         txtName = new JTextField();
+        txtName.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         txtPrice = new JTextField();
+        txtPrice.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         btnUpdate = new JButton("Update");
+        btnUpdate.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        btnUpdate.setBackground(new Color(100, 149, 237));
+        btnUpdate.setForeground(Color.WHITE);
+        btnUpdate.setFocusPainted(false);
+        btnUpdate.setBorder(BorderFactory.createEmptyBorder(8,15,8,15));
+        btnUpdate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         add(new JLabel("Name:"));
         add(txtName);
