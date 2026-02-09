@@ -1,7 +1,6 @@
 package ui;
 
 import DBConnection.DBConnection;
-
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
@@ -16,14 +15,24 @@ public class AddMenuItemFrame extends JFrame {
     public AddMenuItemFrame(DashboardFrame dashboard) {
         this.dashboard = dashboard;
         setTitle("Add Menu Item");
-        setSize(300, 200);
+        setSize(350, 220);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(3,2,10,10));
+        setLayout(new GridLayout(3,2,15,15));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        getContentPane().setBackground(new Color(245, 245, 245));
+        ((JPanel) getContentPane()).setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
         txtName = new JTextField();
+        txtName.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         txtPrice = new JTextField();
+        txtPrice.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         btnSave = new JButton("Save");
+        btnSave.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        btnSave.setBackground(new Color(100, 149, 237));
+        btnSave.setForeground(Color.WHITE);
+        btnSave.setFocusPainted(false);
+        btnSave.setBorder(BorderFactory.createEmptyBorder(8,15,8,15));
+        btnSave.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         add(new JLabel("Name:"));
         add(txtName);
@@ -54,3 +63,4 @@ public class AddMenuItemFrame extends JFrame {
         }
     }
 }
+
